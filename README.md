@@ -170,6 +170,8 @@ pull requests.
 
 ---
 
+> Documentation de projet revue en août 2026.
+
 ## 👤 Auteur
 
 Projet réalisé par [Christopher Semard](https://github.com/christophersemard)

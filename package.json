@@ -1,7 +1,8 @@
 {
-  "name": "my-app",
+  "name": "nextjs-fullstack-blog",
   "version": "0.1.0",
   "private": true,
+  "description": "Application full-stack Next.js avec blog, authentification et espace d'administration.",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

@@ -1,21 +1,25 @@
 // lib/auth.ts
 import { cookies } from "next/headers";
-import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
-import { NextRequest } from "next/server";
 import { SignJWT, jwtVerify } from "jose";
 
 const COOKIE_NAME = "auth_user";
-const secret = new TextEncoder().encode(
-    process.env.AUTH_SECRET || "jwt_tres_tres_tres_secret"
-);
+
+function getAuthSecret() {
+    const value = process.env.AUTH_SECRET;
+    if (!value) {
+        throw new Error("AUTH_SECRET must be configured");
+    }
+
+    return new TextEncoder().encode(value);
+}
 
 export async function setUserCookie(userId: number, username: string) {
     const token = await new SignJWT({ userId, username })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
         .setExpirationTime("7d")
-        .sign(secret);
+        .sign(getAuthSecret());
 
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_NAME, token, {
@@ -44,7 +48,7 @@ export async function getUserFromCookie() {
     if (!cookie) return null;
 
     try {
-        const { payload } = await jwtVerify(cookie, secret);
+        const { payload } = await jwtVerify(cookie, getAuthSecret());
         return {
             id: payload.userId as number,
             username: payload.username as string,
@@ -52,11 +56,4 @@ export async function getUserFromCookie() {
     } catch {
         return null;
     }
-}
-
-export async function getUserFromRequest(request: NextRequest) {
-    const id = request.cookies.get(COOKIE_NAME)?.value;
-    if (!id) return null;
-
-    return prisma.users.findUnique({ where: { id: Number(id) } });
 }

@@ -89,8 +89,8 @@ flowchart LR
 ### Installation
 
 ~~~bash
-git clone https://github.com/christophersemard/cours-nextjs.git
-cd cours-nextjs
+git clone https://github.com/christophersemard/nextjs-fullstack-blog.git
+cd nextjs-fullstack-blog
 npm ci
 cp .env.example .env
 ~~~
